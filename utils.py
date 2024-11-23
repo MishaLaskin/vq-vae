@@ -8,6 +8,7 @@ from datasets.block import BlockDataset, LatentBlockDataset
 import numpy as np
 
 
+# TODO: Add ImageNet and MSCOCO dataloaders
 def load_cifar():
     train = datasets.CIFAR10(root="data", train=True, download=True,
                              transform=transforms.Compose([
@@ -106,9 +107,13 @@ def readable_timestamp():
 def save_model_and_results(model, results, hyperparameters, timestamp):
     SAVE_MODEL_PATH = os.getcwd() + '/results'
 
+    # TODO: Need to ensure that after pre-training, we save the model and all its components separately
     results_to_save = {
-        'model': model.state_dict(),
-        'results': results,
+        'model':    model.state_dict(),
+        'encoder':  model.encoder.state_dict(),
+        'codebook': model.vector_quantization.state_dict(),
+        'decoder':  model.decoder.state_dict(),
+        'results':  results,
         'hyperparameters': hyperparameters
     }
     torch.save(results_to_save,
